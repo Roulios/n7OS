@@ -12,7 +12,11 @@
  * 
  */
 typedef struct {
-    // a completer
+    uint8_t present: 1; // Present
+    uint8_t write_acces: 1; // Droit d'écriture sur la page
+    uint8_t user_mode: 1; // Page mode utilisateur ou noyau
+    uint16_t reserve: 9;
+    uint32_t page: 20; // Adresse de la page
 } page_table_entry_t;
 
 /**
