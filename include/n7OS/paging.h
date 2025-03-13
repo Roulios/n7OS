@@ -15,8 +15,11 @@ typedef struct {
     uint8_t present: 1; // Present
     uint8_t write_acces: 1; // Droit d'écriture sur la page
     uint8_t user_mode: 1; // Page mode utilisateur ou noyau
-    uint16_t reserve: 9;
-    uint32_t page: 20; // Adresse de la page
+    uint8_t accessed: 1; // Page accédée
+    uint8_t dirty: 1; // Page modifiée
+    uint8_t reserved: 4; // Bits réservés
+    uint8_t avail: 3;
+    uint32_t page: 20;
 } page_table_entry_t;
 
 /**
