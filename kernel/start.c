@@ -3,6 +3,9 @@
 #include <n7OS/processor_structs.h>
 #include <n7OS/console.h>
 #include <n7OS/paging.h>
+#include <n7OS/irq.h>
+
+extern void handler_IT();
 
 void kernel_start(void)
 {
@@ -14,8 +17,10 @@ void kernel_start(void)
     // lancement des interruptions
     sti();
 
-    // on initialise la pagination
-    
+    // Adresse totalement aléatoire pour l'interruption 50
+    init_irq_entry(50, (uint32_t)handler_IT);
+
+    __asm__ volatile ("int $50"::); // On lance l'interruption 50
 
     // on ne doit jamais sortir de kernel_start
     while (1) {

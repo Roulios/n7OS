@@ -78,7 +78,7 @@ PageTable alloc_page_entry(uint32_t address, int is_writeable, int is_kernel) {
                 phy_page, is_writeable, is_kernel);
 
     
-    printf("%x  à l'adresse : %x\n", pgtab[0x3ff & (address >> 12)].value,  address);
+    //printf("%x  à l'adresse : %x\n", pgtab[0x3ff & (address >> 12)].value,  address);
   
 
     return pgtab;
