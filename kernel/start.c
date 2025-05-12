@@ -4,6 +4,7 @@
 #include <n7OS/console.h>
 #include <n7OS/paging.h>
 #include <n7OS/irq.h>
+#include <n7OS/time.h>
 
 extern void handler_IT();
 
@@ -13,6 +14,9 @@ void kernel_start(void)
     init_console();
     pagedir= initialise_paging();
     setup_base(pagedir /* la memoire virtuelle n'est pas encore definie */);
+
+    // Initialisation de l'horloge
+    init_clock();
 
     // lancement des interruptions
     sti();

@@ -15,5 +15,15 @@ void init_irq() {
 
 /** Fonction handler des interruption en C, va permettre l'execution de commandes*/
 void handler_en_C(int id_interruption) {
-    printf("Reception de l'interruption : %i\n", id_interruption);
+    // switch pour savoir quelle interruption on a
+    switch (id_interruption) {
+        case 32:
+            // Gestion de l'interruption 32 = horloge
+            handler_clock();
+            break;
+        default:
+            printf("Reception de l'interruption : %i\n", id_interruption);
+            break;
+    }
+
 }

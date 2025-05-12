@@ -1,5 +1,6 @@
 #include <n7OS/console.h>
 #include <n7OS/cpu.h>
+#include <n7OS/time.h>
 
 uint16_t *scr_tab;
 int cursor_pos= 0;
@@ -20,6 +21,9 @@ void scroll_ecran() {
 
     // WTF, TODO: Faire ça propre
     cursor_pos = (cursor_pos / VGA_WIDTH) * (VGA_WIDTH - 1) - 55;
+
+    // Affichage du timer dans le coin à droite de l'écran
+    afficher_compteur();
 }
 
 void set_cursor(int pos) {
@@ -32,7 +36,7 @@ void set_cursor(int pos) {
     outb(poids_faible, PORT_DATA);
 }
 
-void get_cursor() {
+int get_cursor() {
     int pos = 0;
     outb(CMD_HIGH, PORT_CMD); // Lecture bit de poids fort
     pos = inb(PORT_DATA) << 8;
