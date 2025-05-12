@@ -45,4 +45,16 @@ void init_console();
  */
 void console_putbytes(const char *s, int len);
 
+/*
+ *  Fonction qui permet le déplacement du curseur de la console
+ *  @param pos Position du curseur 
+*/
+void set_cursor(int pos);
+
+/*
+*   Fonction qui récupère la position actuel du curseur de la console
+*   @return Position du curseur
+*/
+int get_cursor();
+
 #endif

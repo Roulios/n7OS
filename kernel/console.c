@@ -26,10 +26,19 @@ void set_cursor(int pos) {
     int poids_faible = pos % 256;
     int poids_fort = pos<<8;
 
-    outb(CMD_HIGH, PORT_CMD);
+    outb(CMD_HIGH, PORT_CMD); // Ecriture bit de poids fort
     outb(poids_fort, PORT_DATA);
-    outb(CMD_LOW, PORT_CMD);
+    outb(CMD_LOW, PORT_CMD); // Ecriture bit de poids faible
     outb(poids_faible, PORT_DATA);
+}
+
+void get_cursor() {
+    int pos = 0;
+    outb(CMD_HIGH, PORT_CMD); // Lecture bit de poids fort
+    pos = inb(PORT_DATA) << 8;
+    outb(CMD_LOW, PORT_CMD); // Lecture bit de poids faible
+    pos |= inb(PORT_DATA);  
+    return pos;
 }
 
 void console_putchar(const char c) {
