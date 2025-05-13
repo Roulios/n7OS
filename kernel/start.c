@@ -18,11 +18,11 @@ void kernel_start(void)
     // Initialisation de l'horloge
     init_clock();
 
-    // lancement des interruptions
-    sti();
-
     // Adresse totalement aléatoire pour l'interruption 50
     init_irq_entry(50, (uint32_t)handler_IT);
+
+    // lancement des interruptions
+    sti();
 
     __asm__ volatile ("int $50"::); // On lance l'interruption 50
 
