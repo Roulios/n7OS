@@ -55,6 +55,6 @@ void set_cursor(int pos);
 *   Fonction qui récupère la position actuel du curseur de la console
 *   @return Position du curseur
 */
-int get_cursor();
+uint16_t get_cursor();
 
 #endif
