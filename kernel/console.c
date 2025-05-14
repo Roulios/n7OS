@@ -27,6 +27,15 @@ void scroll_ecran() {
 }
 
 void set_cursor(int pos) {
+    // Calcul du nombre de lignes à remonter dans le cas où le curseur est en dehors de l'écran
+    int scroll_lines = (pos / (VGA_HEIGHT * VGA_WIDTH));
+
+    /* on remonte l'écran si la position est en dehors des limites */
+    for(uint16_t i = 0; i < scroll_lines; i++) {
+        scroll_ecran();
+        pos -= VGA_WIDTH;
+    }
+
     int poids_faible = pos % 256;
     int poids_fort = pos<<8;
 
@@ -36,8 +45,8 @@ void set_cursor(int pos) {
     outb(poids_faible, PORT_DATA);
 }
 
-int get_cursor() {
-    int pos = 0;
+uint16_t get_cursor() {
+    uint16_t pos = 0;
     outb(CMD_HIGH, PORT_CMD); // Lecture bit de poids fort
     pos = inb(PORT_DATA) << 8;
     outb(CMD_LOW, PORT_CMD); // Lecture bit de poids faible
@@ -48,10 +57,11 @@ int get_cursor() {
 void console_putchar(const char c) {
 
     // Gestion du scroll
+    /*
     if(cursor_pos >= max_value_cursor_pos) {
         scroll_ecran();
         set_cursor(cursor_pos);
-    }
+    }*/
     
     // Si c'est un caractère, on l'affiche
     if (c > 31 && c < 127) {
@@ -74,7 +84,7 @@ void console_putchar(const char c) {
         cursor_pos = (cursor_pos / VGA_WIDTH)* VGA_WIDTH;
 
     }
-    // Décala
+    // Décalage de 8 espaces
     else if(c == '\t') {
         cursor_pos = cursor_pos + 8;
 
