@@ -57,12 +57,11 @@ void afficher_compteur() {
     uint32_t minutes = seconds / 60;
     uint32_t hours = minutes / 60;
 
-    uint16_t pos = get_cursor();            // Récupération de la position actuelle du curseur
     set_cursor(VGA_WIDTH - 20);             // Déplacement du curseur en haut à droite
 
-    printf("Uptime : %02d:%02d:%02d", hours % 24, minutes % 60, seconds % 60); // Affichage de l'heure
-
-    set_cursor(pos);                        // Restauration de la position du curseur
+    uint16_t pos = get_cursor();
+    printf("Uptime : %02d:%02d:%02d\n", hours % 24, minutes % 60, seconds % 60); // Affichage de l'heure
+    set_cursor(pos);                   // Restauration de la position du curseur
 }
 
 // Fonction qui récupère le nombre de ticks pour convertir dans un format hh:mm:ss
