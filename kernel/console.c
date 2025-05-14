@@ -3,11 +3,11 @@
 #include <n7OS/time.h>
 
 uint16_t *scr_tab;
-int cursor_pos= 0;
 int max_value_cursor_pos = VGA_HEIGHT * VGA_WIDTH;
 
 void init_console() {
     scr_tab= (uint16_t *) SCREEN_ADDR;
+    set_cursor(0); // Initialisation du curseur à la position 0
 }
 
 void scroll_ecran() {
@@ -20,7 +20,7 @@ void scroll_ecran() {
             0, sizeof(uint16_t) * VGA_WIDTH);
 
     // WTF, TODO: Faire ça propre
-    cursor_pos = (cursor_pos / VGA_WIDTH) * (VGA_WIDTH - 1) - 55;
+    //cursor_pos = (cursor_pos / VGA_WIDTH) * (VGA_WIDTH - 1) - 55;
 
     // Affichage du timer dans le coin à droite de l'écran
     afficher_compteur();
@@ -36,8 +36,8 @@ void set_cursor(int pos) {
         pos -= VGA_WIDTH;
     }
 
-    int poids_faible = pos % 256;
-    int poids_fort = pos<<8;
+    int poids_faible = pos & 0x00FF; // 8 bits de poids faible
+    int poids_fort = pos>>8;
 
     outb(CMD_HIGH, PORT_CMD); // Ecriture bit de poids fort
     outb(poids_fort, PORT_DATA);
@@ -62,6 +62,8 @@ void console_putchar(const char c) {
         scroll_ecran();
         set_cursor(cursor_pos);
     }*/
+
+    int cursor_pos = get_cursor();
     
     // Si c'est un caractère, on l'affiche
     if (c > 31 && c < 127) {
