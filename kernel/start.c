@@ -5,6 +5,7 @@
 #include <n7OS/paging.h>
 #include <n7OS/irq.h>
 #include <n7OS/time.h>
+#include <unistd.h>
 
 extern void handler_IT();
 
@@ -24,12 +25,17 @@ void kernel_start(void)
     // lancement des interruptions
     sti();
 
+    init_syscall();
+
     __asm__ volatile ("int $50"::); // On lance l'interruption 50
 
-    // on ne doit jamais sortir de kernel_start
-    while (1) {
-        printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\t fezfez   e\nhyhiu");
+    for(int i = 0; i < 100; i++) {
+        printf("Hello world ! %d\n", i);
+    }
     
+
+    // on ne doit jamais sortir de kernel_start
+    while (1) {    
         alloc_page_entry(0xA00000, 1, 0);
         int* pipi = (int*)0xA00000;
         *pipi = 0x12345678;
