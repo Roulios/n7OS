@@ -6,6 +6,7 @@
 #include <n7OS/irq.h>
 #include <n7OS/time.h>
 #include <unistd.h>
+#include <n7OS/sys.h>
 
 extern void handler_IT();
 
@@ -16,6 +17,8 @@ void kernel_start(void)
     pagedir= initialise_paging();
     setup_base(pagedir /* la memoire virtuelle n'est pas encore definie */);
 
+    init_syscall();
+
     // Initialisation de l'horloge
     init_clock();
 
@@ -25,9 +28,7 @@ void kernel_start(void)
     // lancement des interruptions
     sti();
 
-    init_syscall();
-
-    __asm__ volatile ("int $50"::); // On lance l'interruption 50
+    //__asm__ volatile ("int $50"::); // On lance l'interruption 50
 
     for(int i = 0; i < 100; i++) {
         printf("Hello world ! %d\n", i);

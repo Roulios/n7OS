@@ -1,3 +1,3 @@
 #include <unistd.h>
 
-syscall1 ( int , shutdown , int , n)
+syscall1 ( int , shutdown , int , n )
