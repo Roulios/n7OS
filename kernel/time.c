@@ -27,7 +27,7 @@ void init_clock() {
     outb(freq & 0xFF, 0x40); // Octet de poids faible
     outb((freq >> 8) & 0xFF, 0x40); // Octet de poids fort
 
-    outb(inb(0x21)&0xfe, 0x21); // Autorisation de l'interruption 0
+    outb(inb(0x21)&0xfe, 0x21); // Autorisation de l'interruption
 
     // Initialisation de l'interruption pour le timer (interruption 32)
     init_irq_entry(32, (uint32_t)handler_IT_clock);
@@ -37,13 +37,13 @@ void handler_clock() {
 
     //printf("Handler horloge\n");
 
-    // Masquage de l'interruption 0
+    // Masquage de l'interruption clock
     outb(inb(0x21) | 0x01, 0x21); // Masquage de l'IRQ 0 TODO: Vérifier si c'est nécessaire
 
     // Incrémentation du nombre de ticks
     ticks++;
-    outb(0x20, 0x20); // Envoi de l'acknowledge à l'IRQ 0
-    outb(inb(0x21)&0xfe, 0x21); // Autorisation de l'interruption 0
+    outb(0x20, 0x20); // Envoi de l'acknowledge à l'IRQ0
+    outb(inb(0x21)&0xfe, 0x21); // Autorisation de l'interruption
     
     // Affichage du nombre de ticks sur la console
     if (ticks % 1000 == 0) {
