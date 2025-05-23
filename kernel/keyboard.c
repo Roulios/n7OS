@@ -66,14 +66,4 @@ char kgetch() {
     }
 
     return c;
-
-
-void init_keyboard() {
-
-}
-
-char kgetch() {
-    char c= '\0';
-
-    return c;
 }
