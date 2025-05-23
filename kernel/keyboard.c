@@ -9,6 +9,12 @@ extern void handler_IT_keyboard();
 #define BUFFER_CIRCULAIRE_SIZE 256
 char buffer_char[BUFFER_CIRCULAIRE_SIZE];
 
+int* buffer_index_start;
+int* buffer_index_end;
+
+*buffer_index_end = 0;
+*buffer_index_start = 0;
+
 // Fonction d'initialisation des input de la part d'un clavier
 void init_keyboard() {
 
@@ -31,38 +37,38 @@ void handler_keyboard() {
     uint8_t code = inb(0x60);
 
     // Vérification si la touche est pressée ou relâchée
-    if(!(code & 0x80)) {
-        // La touche est pressée, on va donc l'écrire dans le terminal, on doit convertir le code en un caractère
-
-        // Conversion du code en caractère a=0x10,TODO: Vérifier si c'est le bon code
+    if(!IS_KEY_RELEASED(code)) {
         char c = 0;
-        if(code >= 0x10 && code <= 0x19) {
-            c = 'a' + (code - 0x10);
-        } else if(code >= 0x1A && code <= 0x23) {
-            c = 'A' + (code - 0x1A);
-        } else if(code >= 0x2C && code <= 0x35) {
-            c = '0' + (code - 0x2C);
-        } else if(code == 0x29) {
-            c = ' ';
-        } else if(code == 0x1C) {
-            c = '\n';
-        }
 
-        kgetch();
+        // La touche est pressée, on va donc l'écrire dans le terminal, on doit convertir le code en un caractère
+        if(code < 0x80) {
+            // On va chercher le code dans le tableau de conversion
+            c = scancode_map[code];
+        } else {
+            // On va chercher le code dans le tableau de conversion avec shift
+            c = scancode_map_shift[code - 0x80];
+        }        
+
+        // Ajout de la touche dans le buffer circulant
+        buffer_char[*buffer_index_end] = c;
+        *buffer_index_end += 1;
+
+        // Si on a dépassé la taille du buffer, on revient au début
+        if(*buffer_index_end >= BUFFER_CIRCULAIRE_SIZE) {
+            *buffer_index_end = 0;
+        }
     }
 }
 
 
-
-// Fonction qui retourne un caractère stocké dans buffer circulant de taille connue
+// Fonction qui retourne un caractère stocké dans le buffer circulant
 char kgetch() {
-    // On va lire le buffer circulant
-    int buffer_char_index = 0;
+    char c = buffer_char[*buffer_index_start];
+    *buffer_char += 1;
 
-    char c = 0;
-    if(buffer_char != 0) {
-        c = buffer_char[buffer_char_index];
-        buffer_char_index++;
+    // Si on a dépassé la taille du buffer, on revient au début
+    if(*buffer_index_start >= BUFFER_CIRCULAIRE_SIZE) {
+        *buffer_index_start = 0;
     }
 
     return c;
